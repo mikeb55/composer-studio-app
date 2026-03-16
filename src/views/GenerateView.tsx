@@ -7,7 +7,7 @@ import './GenerateView.css'
 
 export function GenerateView() {
   const [presets, setPresets] = useState<string[]>([])
-  const [preset, setPreset] = useState('shorter_head')
+  const [preset, setPreset] = useState('wheeler_lyric')
   const [inputText, setInputText] = useState('')
   const [loading, setLoading] = useState(false)
   const [result, setResult] = useState<{
@@ -29,7 +29,7 @@ export function GenerateView() {
       setPresets(list)
       if (list.length && !list.includes(preset)) setPreset(list[0])
     } catch {
-      setPresets(['shorter_head', 'barry_bebop', 'hybrid_counterpoint'])
+      setPresets(['wheeler_lyric', 'barry_bebop', 'hybrid_counterpoint'])
     }
   }
 
@@ -114,7 +114,7 @@ export function GenerateView() {
               ))
             ) : (
               <>
-                <option value="shorter_head">shorter_head</option>
+                <option value="wheeler_lyric">wheeler_lyric</option>
                 <option value="barry_bebop">barry_bebop</option>
                 <option value="hybrid_counterpoint">hybrid_counterpoint</option>
               </>
