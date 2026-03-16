@@ -1,7 +1,10 @@
 import axios from 'axios'
 
+/** In dev: Vite proxy /api -> backend. In Tauri desktop: use full backend URL. */
+const apiBase = import.meta.env.VITE_API_BASE || '/api'
+
 const api = axios.create({
-  baseURL: '/api',
+  baseURL: apiBase,
   headers: { 'Content-Type': 'application/json' },
 })
 

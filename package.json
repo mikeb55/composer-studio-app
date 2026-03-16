@@ -5,9 +5,15 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:full": "concurrently -n backend,vite -c blue,green \"py backend/run_server.py\" \"vite\"",
+    "dev:tauri": "concurrently -n backend,vite -c blue,green \"py backend/run_server.py\" \"vite\"",
     "build": "tsc -b && vite build",
+    "build:tauri": "cross-env VITE_API_BASE=http://127.0.0.1:8765 tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
+    "tauri": "tauri",
+    "tauri:dev": "tauri dev",
+    "tauri:build": "tauri build",
     "test": "vitest run",
     "test:watch": "vitest"
   },
@@ -30,6 +36,7 @@
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^6.0.0",
     "@vitest/ui": "^4.1.0",
+    "cross-env": "^10.1.0",
     "eslint": "^9.39.4",
     "eslint-plugin-react-hooks": "^7.0.1",
     "eslint-plugin-react-refresh": "^0.5.2",
