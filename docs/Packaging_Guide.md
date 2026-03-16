@@ -35,25 +35,13 @@ This guide explains how to build and launch Composer Studio as a Windows desktop
 
 ## Launch the Packaged App
 
-The desktop app requires the **backend API** to run. Two options:
-
-### Option A: Launcher script (recommended)
-
-From the project root:
-
-```bash
-scripts\launch_desktop.bat
-```
-
-This starts the backend, waits for readiness, then launches the Tauri app.
-
-### Option B: Manual
+The desktop app requires the **backend API** to run on port 8765.
 
 1. Start the backend in a terminal:
    ```bash
    py backend/run_server.py
    ```
-2. Run the executable:
+2. Launch the app via the **desktop shortcut** or run:
    ```bash
    src-tauri\target\release\Composer Studio.exe
    ```
@@ -62,9 +50,19 @@ This starts the backend, waits for readiness, then launches the Tauri app.
 
 ## Desktop Shortcut
 
-1. Right-click `Composer Studio.exe` (or the launcher script)
-2. **Send to** → **Desktop (create shortcut)**
-3. For the launcher: right-click the shortcut → **Properties** → set **Start in** to the project root so the backend path resolves correctly
+A native Windows shortcut is created automatically after a successful build:
+
+```bash
+npm run tauri:build:full
+```
+
+Or create the shortcut manually after building:
+
+```bash
+npm run create-shortcut
+```
+
+The shortcut appears on your Desktop as **Composer Studio** and points directly to the packaged executable. No .bat files or Python scripts are used for launching.
 
 ---
 

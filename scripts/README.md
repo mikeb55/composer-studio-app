@@ -1,15 +1,19 @@
 # Composer Studio Scripts
 
-## launch_desktop.bat
+## create-desktop-shortcut.cjs
 
-Starts the backend API and launches the packaged Composer Studio desktop app.
+Creates a native Windows desktop shortcut for Composer Studio. Points to the packaged Tauri executable. No .bat files or Python scripts.
 
-**Usage:** Run from project root:
+**Usage:**
 ```bash
-scripts\launch_desktop.bat
+npm run create-shortcut
 ```
 
 **Requirements:**
-- Python with backend dependencies installed
-- App built via `npm run tauri:build`
-- creative-engines available (set `CREATIVE_ENGINES_PATH` if needed)
+- App built via `npm run tauri:build` (requires Rust)
+- Shortcut target: `src-tauri/target/release/Composer Studio.exe`
+
+**Full build + shortcut:**
+```bash
+npm run tauri:build:full
+```
