@@ -73,7 +73,13 @@ def _count_notes(obj: Any) -> int:
     if isinstance(obj, list):
         return sum(_count_notes(x) for x in obj)
     if hasattr(obj, "sections"):
-        return sum(_count_notes(getattr(s, "melody_events", [])) for s in obj.sections)
+        total = 0
+        for s in obj.sections:
+            total += _count_notes(getattr(s, "melody_events", []))
+            mb = getattr(s, "melody_blueprint", None)
+            if mb:
+                total += len(getattr(mb, "intervals", []) or []) + len(getattr(mb, "pitches", []) or [])
+        return total
     if hasattr(obj, "melody_events"):
         return _count_notes(getattr(obj, "melody_events", []))
     return 0

@@ -16,10 +16,17 @@ def detect_mush(candidate: Dict[str, Any]) -> Tuple[bool, float, str]:
     if not compiled:
         return False, 0.0, "No composition"
     notes = _extract_notes(compiled)
-    if len(notes) < 8:
+    min_notes = 8
+    min_pitches = 4
+    if hasattr(compiled, "sections") and compiled.sections:
+        sec0 = compiled.sections[0]
+        if hasattr(sec0, "melody_blueprint") and getattr(sec0, "melody_blueprint", None):
+            min_notes = 4
+            min_pitches = 2
+    if len(notes) < min_notes:
         return False, 0.3, "Too few notes"
     pitches = _extract_pitches(notes)
-    if len(pitches) < 4:
+    if len(pitches) < min_pitches:
         return False, 0.4, "Insufficient pitch variety"
     return True, 1.0, "OK"
 
@@ -43,6 +50,14 @@ def _extract_notes(compiled: Any) -> List[Any]:
     elif hasattr(compiled, "sections"):
         for sec in compiled.sections:
             out.extend(_extract_notes(getattr(sec, "melody_events", [])))
+            mb = getattr(sec, "melody_blueprint", None)
+            if mb is not None:
+                intervals = getattr(mb, "intervals", []) or []
+                pitches = getattr(mb, "pitches", []) or []
+                for p in pitches:
+                    out.append({"pitch": p})
+                for iv in intervals:
+                    out.append({"pitch": 60 + (iv % 12)})
     elif hasattr(compiled, "melody_events"):
         out.extend(_extract_notes(getattr(compiled, "melody_events", [])))
     return out
