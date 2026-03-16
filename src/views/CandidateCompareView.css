@@ -1,0 +1,60 @@
+.candidate-compare-view {
+  padding: 1.5rem;
+}
+
+.candidate-compare-view h2 {
+  font-size: 1.25rem;
+  margin: 0 0 1rem;
+}
+
+.candidate-compare-view .empty {
+  color: var(--text);
+  font-style: italic;
+}
+
+.compare-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1rem;
+}
+
+.compare-card {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.compare-header {
+  padding: 0.5rem 0.75rem;
+  background: var(--code-bg);
+  font-size: 0.875rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.compare-header .engines {
+  flex: 1;
+}
+
+.compare-header .score {
+  font-weight: 500;
+}
+
+.compare-score {
+  flex: 1;
+  min-height: 300px;
+}
+
+.compare-score .loading,
+.compare-score .error {
+  padding: 2rem;
+  text-align: center;
+  color: var(--text);
+}
+
+.compare-score .score-viewer {
+  height: 350px;
+}
