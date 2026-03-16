@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { generateCandidates, listPresets, exportMusicXml, type Candidate } from '../api/client'
 import { ScoreViewer } from '../components/ScoreViewer'
+import { GuardrailStatus } from '../components/GuardrailStatus'
 import { CandidateCompareView } from './CandidateCompareView'
 import './GenerateView.css'
 
@@ -19,6 +20,8 @@ export function GenerateView() {
   const [musicxml, setMusicxml] = useState<string | null>(null)
   const [loadingMusicxml, setLoadingMusicxml] = useState(false)
   const [viewMode, setViewMode] = useState<'single' | 'compare'>('single')
+  const [guardrailStatus, setGuardrailStatus] = useState<'SAFE' | 'WARNING' | 'BLOCKED' | null>(null)
+  const [exportError, setExportError] = useState<string | null>(null)
 
   const loadPresets = async () => {
     try {
@@ -63,12 +66,25 @@ export function GenerateView() {
   const handleSelectCandidate = async (c: Candidate) => {
     setSelectedCandidate(c)
     setMusicxml(null)
+    setExportError(null)
+    setGuardrailStatus(null)
     setLoadingMusicxml(true)
     try {
-      const { musicxml: xml } = await exportMusicXml(c)
-      setMusicxml(xml)
+      const res = await exportMusicXml(c)
+      if (res.error) {
+        setExportError(res.reasons?.join('; ') || res.error)
+        setMusicxml(null)
+      } else {
+        setMusicxml(res.musicxml)
+        setExportError(null)
+      }
+      const status = res.status ?? res.guardrail_status
+      setGuardrailStatus(
+        status === 'SAFE' || status === 'WARNING' || status === 'BLOCKED' ? status : null
+      )
     } catch {
       setMusicxml(null)
+      setExportError('Export failed')
     } finally {
       setLoadingMusicxml(false)
     }
@@ -184,16 +200,24 @@ export function GenerateView() {
 
           {selectedCandidate && (
             <div className="notation-section">
-              <h2>Score</h2>
+              <div className="notation-section-header">
+                <h2>Score</h2>
+                {guardrailStatus && (
+                  <GuardrailStatus status={guardrailStatus} />
+                )}
+              </div>
+              {exportError && (
+                <div className="export-blocked">Export blocked: {exportError}</div>
+              )}
               {loadingMusicxml ? (
                 <div className="score-loading">Loading…</div>
               ) : musicxml ? (
                 <div className="score-viewer-wrap">
                   <ScoreViewer musicxml={musicxml} />
                 </div>
-              ) : (
+              ) : !exportError ? (
                 <div className="score-error">Could not load score</div>
-              )}
+              ) : null}
             </div>
           )}
         </section>

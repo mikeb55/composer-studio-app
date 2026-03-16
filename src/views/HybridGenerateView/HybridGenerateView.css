@@ -1,53 +1,67 @@
-.generate-view {
+.hybrid-generate-view {
   padding: 1.5rem;
-  text-align: left;
   max-width: 1200px;
   margin: 0 auto;
 }
 
-.generate-view-header {
+.hybrid-generate-header {
   margin-bottom: 1.5rem;
 }
 
-.generate-view-header h1 {
+.hybrid-generate-header h1 {
   margin: 0 0 0.25rem;
 }
 
-.generate-view-header p {
+.hybrid-generate-header p {
   margin: 0;
   color: var(--text);
   font-size: 0.95rem;
 }
 
-.generate-view-form {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-  align-items: flex-end;
+.hybrid-generate-panel {
   margin-bottom: 2rem;
 }
 
-.form-row {
+.hybrid-parameters {
+  padding: 1rem;
+  background: var(--code-bg, #f4f3ec);
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+.hybrid-parameters h3 {
+  font-size: 1rem;
+  margin: 0 0 0.75rem;
+}
+
+.param-row {
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
+  margin-bottom: 0.75rem;
 }
 
-.form-row label {
+.param-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-bottom: 0.75rem;
+}
+
+.param-row label {
   font-size: 0.875rem;
   font-weight: 500;
 }
 
-.form-row input,
-.form-row select {
+.param-row input {
   padding: 0.5rem 0.75rem;
   border: 1px solid var(--border);
   border-radius: 6px;
   font-size: 1rem;
-  min-width: 200px;
+  max-width: 300px;
 }
 
-.generate-btn {
+.hybrid-generate-btn {
   padding: 0.5rem 1.25rem;
   background: var(--accent);
   color: #fff;
@@ -57,16 +71,16 @@
   cursor: pointer;
 }
 
-.generate-btn:hover:not(:disabled) {
+.hybrid-generate-btn:hover:not(:disabled) {
   opacity: 0.9;
 }
 
-.generate-btn:disabled {
+.hybrid-generate-btn:disabled {
   opacity: 0.6;
   cursor: not-allowed;
 }
 
-.generate-view-results {
+.hybrid-results {
   margin-top: 2rem;
 }
 
@@ -77,54 +91,22 @@
   border-radius: 6px;
 }
 
-.candidates-section {
+.hybrid-candidates-section {
   margin-bottom: 1.5rem;
 }
 
-.candidates-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 0.75rem;
-}
-
-.candidates-header h2 {
-  font-size: 1.1rem;
-  margin: 0;
-}
-
-.view-toggle {
-  display: flex;
-  gap: 0.25rem;
-}
-
-.view-toggle button {
-  padding: 0.35rem 0.75rem;
-  border: 1px solid var(--border);
-  background: var(--bg);
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 0.875rem;
-}
-
-.view-toggle button.active {
-  background: var(--accent-bg);
-  border-color: var(--accent);
-}
-
-.candidates-section h2,
-.notation-section h2 {
+.hybrid-candidates-section h2 {
   font-size: 1.1rem;
   margin: 0 0 0.75rem;
 }
 
-.candidates-list {
+.hybrid-candidates-section .candidates-list {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
 }
 
-.candidate-card {
+.hybrid-candidates-section .candidate-card {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -137,12 +119,12 @@
   transition: border-color 0.15s, background 0.15s;
 }
 
-.candidate-card:hover {
+.hybrid-candidates-section .candidate-card:hover {
   border-color: var(--accent-border);
   background: var(--accent-bg);
 }
 
-.candidate-card.selected {
+.hybrid-candidates-section .candidate-card.selected {
   border-color: var(--accent);
   background: var(--accent-bg);
 }
@@ -163,19 +145,20 @@
   margin-top: 0.25rem;
 }
 
-.notation-section {
+.hybrid-notation-section {
   margin-top: 1.5rem;
 }
 
-.notation-section-header {
+.hybrid-notation-header {
   display: flex;
   align-items: center;
   gap: 1rem;
   margin-bottom: 0.75rem;
 }
 
-.notation-section-header h2 {
+.hybrid-notation-header h2 {
   margin: 0;
+  font-size: 1.1rem;
 }
 
 .export-blocked {

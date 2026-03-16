@@ -25,8 +25,19 @@ def _ensure_ce_path():
         sys.path.insert(0, _eng)
 
 
-def export_musicxml(compiled: Any, filename: Optional[str] = None) -> Dict[str, str]:
-    """Export composition to MusicXML string."""
+def export_musicxml(compiled: Any, filename: Optional[str] = None) -> Dict[str, Any]:
+    """Export composition to MusicXML string. Blocks if guardrails fail."""
+    from backend.validation.export_guard import validate_export
+    cand = compiled if isinstance(compiled, dict) else {"compiled": compiled}
+    validation = validate_export(cand)
+    if validation.get("block_export"):
+        return {
+            "error": "Export blocked by guardrails",
+            "status": validation.get("status", "BLOCKED"),
+            "reasons": validation.get("reasons", []),
+            "musicxml": "",
+            "filename": filename or "composition.musicxml",
+        }
     _ensure_ce_path()
     from shared_composer.engine_registry import get_engine, ensure_engines_loaded
     ensure_engines_loaded()
@@ -38,7 +49,9 @@ def export_musicxml(compiled: Any, filename: Optional[str] = None) -> Dict[str, 
     else:
         eng = get_engine(mel)
         xml = eng.export_musicxml(cand)
-    return {"musicxml": xml, "filename": filename or "composition.musicxml"}
+    result: Dict[str, Any] = {"musicxml": xml, "filename": filename or "composition.musicxml"}
+    result["guardrail_status"] = validation.get("status", "SAFE")
+    return result
 
 
 def export_lead_sheet(lead_sheet: Any, filename: Optional[str] = None) -> Dict[str, str]:

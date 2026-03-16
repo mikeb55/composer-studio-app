@@ -25,7 +25,7 @@ else:
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from backend.api.routes import generate, rank, orchestrate, songwriting, export_routes, project, engines
+from backend.api.routes import generate, rank, orchestrate, songwriting, export_routes, project, engines, hybrid, validation
 
 app = FastAPI(title="Composer Studio API", version="0.1.0")
 app.add_middleware(
@@ -43,6 +43,8 @@ app.include_router(songwriting.router, prefix="/create_leadsheet", tags=["songwr
 app.include_router(export_routes.router, prefix="/export", tags=["export"])
 app.include_router(project.router, prefix="/project", tags=["project"])
 app.include_router(engines.router, prefix="/engines", tags=["engines"])
+app.include_router(hybrid.router, prefix="/hybrid", tags=["hybrid"])
+app.include_router(validation.router, prefix="/validation", tags=["validation"])
 
 
 @app.get("/")

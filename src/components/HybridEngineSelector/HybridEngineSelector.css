@@ -1,0 +1,37 @@
+.hybrid-engine-selector {
+  padding: 1rem;
+  background: var(--code-bg, #f4f3ec);
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+.hybrid-engine-selector-title {
+  font-size: 1rem;
+  margin: 0 0 0.75rem;
+}
+
+.hybrid-engine-selector-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 0.75rem 1.5rem;
+}
+
+.hybrid-engine-selector-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.hybrid-engine-selector-row label {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--text, #6b6375);
+}
+
+.hybrid-engine-selector-row select {
+  padding: 0.4rem 0.6rem;
+  border: 1px solid var(--border, #e5e4e7);
+  border-radius: 6px;
+  font-size: 0.9rem;
+  background: var(--bg, #fff);
+}

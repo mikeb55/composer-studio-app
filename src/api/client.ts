@@ -41,8 +41,17 @@ export async function generateCandidates(req: GenerateRequest): Promise<Generate
   return data
 }
 
-export async function exportMusicXml(compiled: Candidate): Promise<{ musicxml: string; filename: string }> {
-  const { data } = await api.post<{ musicxml: string; filename: string }>('/export/musicxml', {
+export interface ExportMusicXmlResponse {
+  musicxml: string
+  filename: string
+  guardrail_status?: 'SAFE' | 'WARNING' | 'BLOCKED'
+  error?: string
+  status?: string
+  reasons?: string[]
+}
+
+export async function exportMusicXml(compiled: Candidate): Promise<ExportMusicXmlResponse> {
+  const { data } = await api.post<ExportMusicXmlResponse>('/export/musicxml', {
     compiled,
     filename: 'composition.musicxml',
   })
@@ -52,4 +61,50 @@ export async function exportMusicXml(compiled: Candidate): Promise<{ musicxml: s
 export async function listPresets(): Promise<string[]> {
   const { data } = await api.get<string[]>('/engines/presets')
   return Array.isArray(data) ? data : []
+}
+
+export async function listEngines(): Promise<string[]> {
+  const { data } = await api.get<string[]>('/engines')
+  return Array.isArray(data) ? data : []
+}
+
+export interface EngineRoles {
+  form_engine?: string
+  harmony_engine?: string
+  texture_engine?: string
+  orchestration_engine?: string
+  counterpoint_engine?: string
+}
+
+export interface HybridGenerateRequest {
+  engine_roles: EngineRoles
+  parameters?: { input_text?: string; seed?: number; count?: number; finalist_count?: number }
+}
+
+export interface HybridGenerateResponse {
+  candidates: Candidate[]
+  ranked: Candidate[]
+  finalists: Candidate[]
+}
+
+export async function generateHybrid(
+  req: HybridGenerateRequest
+): Promise<HybridGenerateResponse> {
+  const { data } = await api.post<HybridGenerateResponse>('/hybrid/generate', req)
+  return data
+}
+
+export interface ValidationResult {
+  valid: boolean
+  block_export: boolean
+  status: 'SAFE' | 'WARNING' | 'BLOCKED'
+  reasons: string[]
+  details: Record<string, unknown>
+}
+
+export async function validateCandidate(candidate: Candidate): Promise<ValidationResult> {
+  const { data } = await api.post<ValidationResult>('/validation/export', {
+    candidate,
+  })
+  return data
 }

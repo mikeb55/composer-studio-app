@@ -1,0 +1,55 @@
+.guardrail-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: 6px;
+  font-size: 0.875rem;
+}
+
+.guardrail-status-badge {
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.guardrail-status--safe {
+  background: #e8f5e9;
+  color: #2e7d32;
+  border: 1px solid #a5d6a7;
+}
+
+.guardrail-status--warning {
+  background: #fff8e1;
+  color: #f57f17;
+  border: 1px solid #ffcc80;
+}
+
+.guardrail-status--blocked {
+  background: #ffebee;
+  color: #c62828;
+  border: 1px solid #ef9a9a;
+}
+
+.guardrail-status-reasons {
+  margin: 0;
+  padding-left: 1rem;
+  list-style: disc;
+}
+
+.guardrail-status-details {
+  margin-top: 0.25rem;
+}
+
+.guardrail-status-details summary {
+  cursor: pointer;
+  font-size: 0.8rem;
+}
+
+.guardrail-status-details pre {
+  margin: 0.25rem 0 0;
+  padding: 0.5rem;
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 4px;
+  font-size: 0.75rem;
+  overflow-x: auto;
+}
