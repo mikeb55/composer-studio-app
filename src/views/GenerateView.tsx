@@ -1,11 +1,14 @@
 import { useState } from 'react'
-import { generateCandidates, listPresets, exportMusicXml, type Candidate } from '../api/client'
+import { useNavigate } from 'react-router-dom'
+import { generateCandidates, listPresets, exportMusicXml, saveRunToProject, type Candidate } from '../api/client'
 import { ScoreViewer } from '../components/ScoreViewer'
+import { PlaybackControls } from '../components/PlaybackControls'
 import { GuardrailStatus } from '../components/GuardrailStatus'
 import { CandidateCompareView } from './CandidateCompareView'
 import './GenerateView.css'
 
 export function GenerateView() {
+  const navigate = useNavigate()
   const [presets, setPresets] = useState<string[]>([])
   const [preset, setPreset] = useState('wheeler_lyric')
   const [inputText, setInputText] = useState('')
@@ -22,6 +25,9 @@ export function GenerateView() {
   const [viewMode, setViewMode] = useState<'single' | 'compare'>('single')
   const [guardrailStatus, setGuardrailStatus] = useState<'SAFE' | 'WARNING' | 'BLOCKED' | null>(null)
   const [exportError, setExportError] = useState<string | null>(null)
+  const [saveProjectName, setSaveProjectName] = useState('')
+  const [savingToProject, setSavingToProject] = useState(false)
+  const [saveProjectError, setSaveProjectError] = useState<string | null>(null)
 
   const loadPresets = async () => {
     try {
@@ -87,6 +93,29 @@ export function GenerateView() {
       setExportError('Export failed')
     } finally {
       setLoadingMusicxml(false)
+    }
+  }
+
+  const handleSaveToProject = async () => {
+    const name = saveProjectName.trim()
+    if (!name || !musicxml) return
+    setSavingToProject(true)
+    setSaveProjectError(null)
+    try {
+      await saveRunToProject({
+        project_name: name,
+        musicxml,
+        preset_name: preset,
+        input_text: inputText || 'Untitled',
+        seed: 0,
+        candidates: result?.candidates,
+        selected_candidate: selectedCandidate ?? undefined,
+      })
+      setSaveProjectName('')
+    } catch (e) {
+      setSaveProjectError(e instanceof Error ? e.message : 'Save failed')
+    } finally {
+      setSavingToProject(false)
     }
   }
 
@@ -202,6 +231,38 @@ export function GenerateView() {
             <div className="notation-section">
               <div className="notation-section-header">
                 <h2>Score</h2>
+                {musicxml && (
+                  <>
+                    <PlaybackControls musicxml={musicxml} compact />
+                    <button
+                      type="button"
+                      className="view-score-btn"
+                      onClick={() => navigate('/score', { state: { musicxml } })}
+                    >
+                      View Score
+                    </button>
+                    <div className="save-to-project">
+                      <input
+                        type="text"
+                        placeholder="Project name"
+                        value={saveProjectName}
+                        onChange={(e) => setSaveProjectName(e.target.value)}
+                        onKeyDown={(e) => e.key === 'Enter' && handleSaveToProject()}
+                      />
+                      <button
+                        type="button"
+                        className="save-project-btn"
+                        onClick={handleSaveToProject}
+                        disabled={savingToProject || !saveProjectName.trim()}
+                      >
+                        {savingToProject ? 'Saving…' : 'Save to Project'}
+                      </button>
+                      {saveProjectError && (
+                        <span className="save-project-error">{saveProjectError}</span>
+                      )}
+                    </div>
+                  </>
+                )}
                 {guardrailStatus && (
                   <GuardrailStatus status={guardrailStatus} />
                 )}

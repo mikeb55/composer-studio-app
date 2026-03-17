@@ -10,8 +10,7 @@ from typing import Any, Dict, List, Optional
 
 def _projects_base() -> str:
     _here = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-    base = os.path.dirname(_here)
-    return os.path.join(base, "projects")
+    return os.path.join(_here, "projects")
 
 
 def create_project(project_name: str, base_dir: Optional[str] = None) -> Dict[str, Any]:

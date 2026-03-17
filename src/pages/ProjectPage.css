@@ -1,0 +1,156 @@
+.project-page {
+  padding: 1.5rem;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.project-page-header {
+  margin-bottom: 1.5rem;
+}
+
+.project-page-header h1 {
+  margin: 0.5rem 0 0;
+}
+
+.project-page-back {
+  color: var(--accent, #666);
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+
+.project-page-back:hover {
+  text-decoration: underline;
+}
+
+.project-page-content {
+  display: flex;
+  gap: 2rem;
+}
+
+.project-page-sidebar {
+  flex: 0 0 220px;
+}
+
+.project-page-sidebar h2 {
+  font-size: 1rem;
+  margin: 0 0 0.75rem;
+}
+
+.project-create {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.project-create input {
+  flex: 1;
+  padding: 0.4rem 0.6rem;
+  font-size: 0.9rem;
+}
+
+.project-create button {
+  padding: 0.4rem 0.75rem;
+  font-size: 0.9rem;
+  border: 1px solid var(--accent);
+  background: var(--accent-bg);
+  color: var(--accent);
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.project-create button:hover:not(:disabled) {
+  background: var(--accent);
+  color: #fff;
+}
+
+.project-create button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.project-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.project-list li {
+  margin-bottom: 0.25rem;
+}
+
+.project-list button {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  text-align: left;
+  border: 1px solid transparent;
+  background: transparent;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.project-list button:hover {
+  background: var(--code-bg, #f4f3ec);
+}
+
+.project-list button.selected {
+  background: var(--accent-bg);
+  border-color: var(--accent);
+}
+
+.project-page-main {
+  flex: 1;
+}
+
+.project-page-main h2 {
+  font-size: 1.1rem;
+  margin: 0 0 1rem;
+}
+
+.project-empty {
+  color: var(--text-muted, #666);
+  font-size: 0.95rem;
+}
+
+.project-error {
+  color: var(--error, #c00);
+  margin-bottom: 1rem;
+}
+
+.run-history {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.run-entry {
+  padding: 1rem;
+  border: 1px solid var(--border, #ddd);
+  border-radius: 8px;
+  margin-bottom: 0.75rem;
+}
+
+.run-label {
+  font-weight: 600;
+  margin-bottom: 0.35rem;
+}
+
+.run-meta {
+  font-size: 0.85rem;
+  color: var(--text-muted, #666);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+}
+
+.run-view-score {
+  display: inline-block;
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.run-view-score:hover {
+  text-decoration: underline;
+}

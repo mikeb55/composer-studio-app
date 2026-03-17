@@ -1,18 +1,22 @@
 import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import {
   listEngines,
   generateHybrid,
   exportMusicXml,
   validateCandidate,
+  saveRunToProject,
   type Candidate,
   type EngineRoles,
 } from '../../api/client'
 import { HybridEngineSelector } from '../../components/HybridEngineSelector'
 import { GuardrailStatus } from '../../components/GuardrailStatus'
+import { PlaybackControls } from '../../components/PlaybackControls'
 import { ScoreViewer } from '../../components/ScoreViewer'
 import './HybridGenerateView.css'
 
 export function HybridGenerateView() {
+  const navigate = useNavigate()
   const [engines, setEngines] = useState<string[]>([])
   const [roles, setRoles] = useState<EngineRoles>({
     form_engine: 'wayne_shorter',
@@ -36,6 +40,9 @@ export function HybridGenerateView() {
   const [guardrailStatus, setGuardrailStatus] = useState<'SAFE' | 'WARNING' | 'BLOCKED' | null>(null)
   const [guardrailReasons, setGuardrailReasons] = useState<string[]>([])
   const [exportError, setExportError] = useState<string | null>(null)
+  const [saveProjectName, setSaveProjectName] = useState('')
+  const [savingToProject, setSavingToProject] = useState(false)
+  const [saveProjectError, setSaveProjectError] = useState<string | null>(null)
 
   useEffect(() => {
     listEngines().then(setEngines).catch(() => setEngines([]))
@@ -96,6 +103,29 @@ export function HybridGenerateView() {
       setExportError('Export failed')
     } finally {
       setLoadingMusicxml(false)
+    }
+  }
+
+  const handleSaveToProject = async () => {
+    const name = saveProjectName.trim()
+    if (!name || !musicxml) return
+    setSavingToProject(true)
+    setSaveProjectError(null)
+    try {
+      await saveRunToProject({
+        project_name: name,
+        musicxml,
+        engine: roles.harmony_engine || roles.form_engine || 'hybrid',
+        input_text: inputText || 'Untitled',
+        seed: 0,
+        candidates: result?.candidates,
+        selected_candidate: selectedCandidate ?? undefined,
+      })
+      setSaveProjectName('')
+    } catch (e) {
+      setSaveProjectError(e instanceof Error ? e.message : 'Save failed')
+    } finally {
+      setSavingToProject(false)
     }
   }
 
@@ -184,6 +214,38 @@ export function HybridGenerateView() {
             <div className="hybrid-notation-section">
               <div className="hybrid-notation-header">
                 <h2>Score</h2>
+                {musicxml && (
+                  <>
+                    <PlaybackControls musicxml={musicxml} compact />
+                    <button
+                      type="button"
+                      className="view-score-btn"
+                      onClick={() => navigate('/score', { state: { musicxml } })}
+                    >
+                      View Score
+                    </button>
+                    <div className="save-to-project">
+                      <input
+                        type="text"
+                        placeholder="Project name"
+                        value={saveProjectName}
+                        onChange={(e) => setSaveProjectName(e.target.value)}
+                        onKeyDown={(e) => e.key === 'Enter' && handleSaveToProject()}
+                      />
+                      <button
+                        type="button"
+                        className="save-project-btn"
+                        onClick={handleSaveToProject}
+                        disabled={savingToProject || !saveProjectName.trim()}
+                      >
+                        {savingToProject ? 'Saving…' : 'Save to Project'}
+                      </button>
+                      {saveProjectError && (
+                        <span className="save-project-error">{saveProjectError}</span>
+                      )}
+                    </div>
+                  </>
+                )}
                 {guardrailStatus && (
                   <GuardrailStatus
                     status={guardrailStatus}

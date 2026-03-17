@@ -178,6 +178,60 @@
   margin: 0;
 }
 
+.view-score-btn {
+  padding: 0.35rem 0.75rem;
+  border: 1px solid var(--accent);
+  background: var(--accent-bg);
+  color: var(--accent);
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.875rem;
+}
+
+.view-score-btn:hover {
+  background: var(--accent);
+  color: #fff;
+}
+
+.save-to-project {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.save-to-project input {
+  width: 140px;
+  padding: 0.35rem 0.5rem;
+  font-size: 0.875rem;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+}
+
+.save-project-btn {
+  padding: 0.35rem 0.75rem;
+  border: 1px solid var(--accent);
+  background: var(--accent-bg);
+  color: var(--accent);
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.875rem;
+}
+
+.save-project-btn:hover:not(:disabled) {
+  background: var(--accent);
+  color: #fff;
+}
+
+.save-project-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.save-project-error {
+  font-size: 0.8rem;
+  color: var(--error, #c00);
+}
+
 .export-blocked {
   padding: 1rem;
   background: #ffebee;

@@ -30,3 +30,7 @@ src-tauri/target/
 
 # Trial / quality pass output
 docs/trial_output/
+
+# Generated outputs
+outputs/
+projects/

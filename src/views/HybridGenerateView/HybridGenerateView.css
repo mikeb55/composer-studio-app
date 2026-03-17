@@ -161,6 +161,55 @@
   font-size: 1.1rem;
 }
 
+.hybrid-notation-header .view-score-btn {
+  padding: 0.35rem 0.75rem;
+  border: 1px solid var(--accent);
+  background: var(--accent-bg);
+  color: var(--accent);
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.875rem;
+}
+
+.hybrid-notation-header .view-score-btn:hover {
+  background: var(--accent);
+  color: #fff;
+}
+
+.hybrid-notation-header .save-to-project {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.hybrid-notation-header .save-to-project input {
+  width: 120px;
+  padding: 0.35rem 0.5rem;
+  font-size: 0.8rem;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+}
+
+.hybrid-notation-header .save-project-btn {
+  padding: 0.35rem 0.6rem;
+  font-size: 0.8rem;
+  border: 1px solid var(--accent);
+  background: var(--accent-bg);
+  color: var(--accent);
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.hybrid-notation-header .save-project-btn:hover:not(:disabled) {
+  background: var(--accent);
+  color: #fff;
+}
+
+.hybrid-notation-header .save-project-error {
+  font-size: 0.75rem;
+  color: var(--error, #c00);
+}
+
 .export-blocked {
   padding: 1rem;
   background: #ffebee;

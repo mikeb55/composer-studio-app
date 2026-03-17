@@ -111,3 +111,116 @@ export async function validateCandidate(candidate: Candidate): Promise<Validatio
   })
   return data
 }
+
+// --- Playback ---
+
+export interface PlaybackStatus {
+  status: string
+  state?: 'stopped' | 'playing' | 'paused'
+  message?: string
+  file_path?: string
+  loop_start?: number
+  loop_end?: number
+}
+
+export async function playbackPlay(params: {
+  file_path?: string
+  musicxml?: string
+  loop_start?: number
+  loop_end?: number
+}): Promise<PlaybackStatus> {
+  const { data } = await api.post<PlaybackStatus>('/playback/play', params)
+  return data
+}
+
+export async function playbackStop(): Promise<PlaybackStatus> {
+  const { data } = await api.post<PlaybackStatus>('/playback/stop')
+  return data
+}
+
+export async function playbackPause(): Promise<PlaybackStatus> {
+  const { data } = await api.post<PlaybackStatus>('/playback/pause')
+  return data
+}
+
+export async function playbackLoop(loop_start?: number, loop_end?: number): Promise<PlaybackStatus> {
+  const { data } = await api.post<PlaybackStatus>('/playback/loop', {
+    loop_start,
+    loop_end,
+  })
+  return data
+}
+
+export async function playbackStatus(): Promise<PlaybackStatus> {
+  const { data } = await api.get<PlaybackStatus>('/playback/status')
+  return data
+}
+
+// --- Project ---
+
+export interface ProjectCreateResponse {
+  project_name: string
+  path: string
+}
+
+export interface ProjectRunResponse {
+  run_path: string
+  run_label: string
+}
+
+export interface RunHistoryEntry {
+  run_label: string
+  run_path: string
+  preset_name?: string
+  input_text?: string
+  seed?: number
+  timestamp?: string
+  candidates?: unknown[]
+  selected_candidate?: unknown
+  export_paths?: string[]
+}
+
+export interface ProjectDetail {
+  project_name: string
+  path: string
+  runs: RunHistoryEntry[]
+}
+
+export async function createProject(projectName: string): Promise<ProjectCreateResponse> {
+  const { data } = await api.post<ProjectCreateResponse>('/project', {
+    project_name: projectName,
+  })
+  return data
+}
+
+export async function saveRunToProject(params: {
+  project_name: string
+  run_label?: string
+  preset_name?: string
+  engine?: string
+  input_text?: string
+  seed?: number
+  candidates?: Candidate[]
+  selected_candidate?: Candidate
+  export_paths?: string[]
+  musicxml?: string
+}): Promise<ProjectRunResponse & { metadata_path?: string; export_paths?: string[] }> {
+  const { data } = await api.post('/project/run/save', params)
+  return data
+}
+
+export async function getProjectHistory(projectName: string): Promise<RunHistoryEntry[]> {
+  const { data } = await api.get<RunHistoryEntry[]>(`/project/history/${encodeURIComponent(projectName)}`)
+  return data
+}
+
+export async function getProject(projectName: string): Promise<ProjectDetail> {
+  const { data } = await api.get<ProjectDetail>(`/project/${encodeURIComponent(projectName)}`)
+  return data
+}
+
+export async function listProjects(): Promise<string[]> {
+  const { data } = await api.get<string[] | { projects?: string[] }>('/project')
+  const arr = Array.isArray(data) ? data : (data as { projects?: string[] })?.projects ?? []
+  return arr
+}
