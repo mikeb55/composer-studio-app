@@ -1,9 +1,11 @@
 """
 Engine repo config — Local path to creative-engines repository.
-Set CREATIVE_ENGINES_PATH env var to override (e.g. for packaging).
+Uses relative path from this repo. Set CREATIVE_ENGINES_PATH env var to override.
 """
 
 import os
 
-_DEFAULT = r"C:\Users\mike\Documents\Cursor AI Projects\creative-engines"
+# Relative from composer-studio-app root: ../creative-engines
+_here = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+_DEFAULT = os.path.normpath(os.path.join(_here, "..", "creative-engines"))
 ENGINE_REPO_PATH = os.environ.get("CREATIVE_ENGINES_PATH") or _DEFAULT

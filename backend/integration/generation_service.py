@@ -81,6 +81,27 @@ def create_single_engine_candidates(
     ]
 
 
+def generate_candidates(
+    engine_name: str,
+    settings: Optional[Dict[str, Any]] = None,
+) -> Dict[str, Any]:
+    """
+    Generate candidate set from single engine.
+    Default: 5 candidates per run.
+    """
+    settings = settings or {}
+    input_text = settings.get("input_text", "Untitled")
+    seed = settings.get("seed", 0)
+    count = settings.get("count", 5)
+    candidates = create_single_engine_candidates(engine_name, input_text, count=count, seed=seed)
+    return {
+        "engine": engine_name,
+        "candidates": candidates,
+        "input_text": input_text,
+        "seed": seed,
+    }
+
+
 def create_hybrid_candidates(
     input_text: str,
     count: int = 12,

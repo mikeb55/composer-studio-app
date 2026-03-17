@@ -33,31 +33,42 @@ def generate(
     }
 
 
-def export_musicxml(candidate: Dict[str, Any], output_dir: Optional[str] = None) -> str:
+def export_musicxml(
+    candidate: Dict[str, Any],
+    output_dir: Optional[str] = None,
+    candidate_id: Optional[str] = None,
+):
     """
-    Export candidate to MusicXML string and optionally write to file.
-    Returns path to saved file if output_dir given, else returns MusicXML string.
-    For single-engine: uses engine's export_musicxml.
+    Export candidate to MusicXML.
+    If output_dir given: writes file, returns dict with candidate_id, musicxml_path, score_metadata.
+    Else: returns MusicXML string (backward compat).
     """
     ensure_engines_loaded()
     compiled = candidate.get("compiled")
     if not compiled:
-        return ""
+        return "" if not output_dir else {"candidate_id": "", "musicxml_path": "", "score_metadata": {}}
     if output_dir and not os.path.isdir(output_dir):
         os.makedirs(output_dir, exist_ok=True)
     engine_name = candidate.get("melody_engine", "wayne_shorter")
     eng = get_engine(engine_name)
     xml_str = eng.export_musicxml(compiled)
     if output_dir:
-        path = os.path.join(output_dir, "composition.musicxml")
+        path = os.path.join(output_dir, f"{candidate_id or 'composition'}.musicxml")
         with open(path, "w", encoding="utf-8") as f:
             f.write(xml_str)
-        return path
+        return {
+            "candidate_id": candidate_id or "candidate",
+            "musicxml_path": path,
+            "score_metadata": {
+                "adjusted_score": candidate.get("adjusted_score"),
+                "base_score": candidate.get("base_score"),
+                "style_fit_score": candidate.get("style_fit_score"),
+            },
+        }
     return xml_str
 
 
 def get_musicxml_path(candidate: Dict[str, Any], output_dir: str) -> str:
-    """
-    Export candidate to MusicXML file and return path.
-    """
-    return export_musicxml(candidate, output_dir)
+    """Export candidate to MusicXML file and return path."""
+    result = export_musicxml(candidate, output_dir=output_dir)
+    return result["musicxml_path"] if isinstance(result, dict) else ""

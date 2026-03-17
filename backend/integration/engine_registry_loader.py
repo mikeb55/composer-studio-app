@@ -25,6 +25,11 @@ def _ensure_ce_path() -> None:
         _CE_PATH_ADDED = True
 
 
+def load_registry() -> None:
+    """Load creative-engines registry. Alias for ensure_engines_loaded."""
+    ensure_engines_loaded()
+
+
 def ensure_engines_loaded() -> None:
     """Ensure built-in engines are registered. Call before list_engines/get_engine."""
     _ensure_ce_path()

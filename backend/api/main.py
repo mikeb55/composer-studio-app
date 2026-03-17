@@ -5,22 +5,11 @@ Composer Studio Backend API — FastAPI service.
 import os
 import sys
 
-# Add creative-engines/engines to path (sibling repo)
-_ce = os.environ.get("CREATIVE_ENGINES_PATH")
-if _ce:
-    _eng = os.path.join(_ce, "engines") if os.path.isdir(os.path.join(_ce, "engines")) else _ce
+# Add creative-engines/engines to path (uses relative path from engine_repo_config)
+from backend.integration.engine_repo_config import ENGINE_REPO_PATH
+_eng = os.path.join(ENGINE_REPO_PATH, "engines")
+if os.path.isdir(_eng) and _eng not in sys.path:
     sys.path.insert(0, _eng)
-else:
-    _parent = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-    _ce_root = os.path.join(_parent, "creative-engines")
-    _eng = os.path.join(_ce_root, "engines")
-    if os.path.isdir(_eng):
-        sys.path.insert(0, _eng)
-    else:
-        _ce_root = os.path.abspath(os.path.join(_parent, "..", "creative-engines"))
-        _eng = os.path.join(_ce_root, "engines")
-        if os.path.isdir(_eng):
-            sys.path.insert(0, _eng)
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware

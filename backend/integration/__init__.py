@@ -7,6 +7,7 @@ from backend.integration.engine_registry_loader import (
     ensure_engines_loaded,
     get_engine,
     list_engines,
+    load_registry,
 )
 from backend.integration.engine_runtime_adapter import generate, export_musicxml, get_musicxml_path
 from backend.integration.hybrid_runtime_adapter import (
@@ -17,6 +18,7 @@ from backend.integration.generation_service import (
     create_candidates,
     create_single_engine_candidates,
     create_hybrid_candidates,
+    generate_candidates,
     list_available_engines,
     list_presets,
 )
@@ -28,6 +30,7 @@ from backend.integration.evaluation_service import (
 __all__ = [
     "ENGINE_REPO_PATH",
     "ensure_engines_loaded",
+    "load_registry",
     "get_engine",
     "list_engines",
     "generate",
@@ -38,6 +41,7 @@ __all__ = [
     "create_candidates",
     "create_single_engine_candidates",
     "create_hybrid_candidates",
+    "generate_candidates",
     "list_available_engines",
     "list_presets",
     "evaluate_and_rank",

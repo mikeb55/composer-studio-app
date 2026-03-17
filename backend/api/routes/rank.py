@@ -4,7 +4,7 @@ from fastapi import APIRouter
 from pydantic import BaseModel
 from typing import List, Any
 
-from backend.generation.pipeline import rank_candidates
+from backend.integration.evaluation_service import rank_candidates
 
 router = APIRouter()
 
@@ -16,4 +16,5 @@ class RankRequest(BaseModel):
 
 @router.post("")
 def rank(req: RankRequest):
+    """Rank candidates using creative-engines evaluation. Returns ranked list."""
     return rank_candidates(req.candidates, req.finalist_count)
